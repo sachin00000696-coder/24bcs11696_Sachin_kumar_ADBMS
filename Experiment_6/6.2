@@ -1,0 +1,45 @@
+--  question (i) Create a complex view named Unsold_Items that joins the Products and Order_Details tables to
+--               display the ProductName and Category of all items that have never been ordered by any customer using a NOT IN Operator
+
+
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(100),
+    Category VARCHAR(50),
+    Price DECIMAL(10,2)
+);
+CREATE TABLE Order_Details (
+    OrderDetailID INT PRIMARY KEY,
+    OrderID INT,
+    ProductID INT,
+    Quantity INT,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
+INSERT INTO Products (ProductID, ProductName, Category, Price)
+VALUES
+(1, 'Laptop', 'Electronics', 60000),
+(2, 'Mobile Phone', 'Electronics', 30000),
+(3, 'Keyboard', 'Accessories', 1500),
+(4, 'Mouse', 'Accessories', 800),
+(5, 'Headphones', 'Accessories', 2000),
+(6, 'Printer', 'Electronics', 12000);
+
+
+INSERT INTO Order_Details (OrderDetailID, OrderID, ProductID, Quantity)
+VALUES
+(101, 1001, 1, 2),
+(102, 1001, 2, 1),
+(103, 1002, 4, 3),
+(104, 1003, 6, 1);
+
+
+CREATE VIEW Unsold_Items AS
+SELECT ProductName, Category
+FROM Products
+WHERE ProductID NOT IN (
+    SELECT ProductID
+    FROM Order_Details
+);
+select * from Unsold_Items
+
